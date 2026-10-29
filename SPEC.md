@@ -12,7 +12,7 @@ people can see and change them.
 
 | Field | Default | Notes |
 | --- | --- | --- |
-| Base URL | `https://api.valen-team.workers.dev` | The free hosted API. Coze (coze.cn) uses the free endpoint reachable from mainland China instead (see §8). The keyed API is `https://llm-proxy.openxxlab.com`; a self-hosted `valen serve` also works. Entered with or without a trailing `/` or `/v1`; requests go to `{host}/v1/...`. The field stays editable. |
+| Base URL | `https://api.valen-team.workers.dev` | The free hosted API. The Coze plugin uses the keyed API instead (see §8). The keyed API is `https://llm-proxy.openxxlab.com`; a self-hosted `valen serve` also works. Entered with or without a trailing `/` or `/v1`; requests go to `{host}/v1/...`. The field stays editable. |
 | API key | empty | Sent as `Authorization: Bearer <key>` only when set. The free API needs none. Stored as a secret. |
 | Model | `valen-2b` | Free text. The hosted APIs serve `valen-0.8b`, `valen-2b` and `valen-4b`; a self-hosted server serves the name it was started with. Where a platform can load choices, it lists the IDs from `GET {host}/v1/models` that start with `valen`. |
 
@@ -46,7 +46,8 @@ With an image, `input` becomes one user message:
 ```
 
 At most one image, in PNG, JPEG or WebP, sent unchanged as a base64 data URL. The MIME type comes
-from the file's metadata (Dify's file object carries `mime_type`) or the `Content-Type` of its download;
+from the file's metadata (Dify's file object carries `mime_type`) or, for a downloaded URL, from the file's
+first bytes;
 another format stops the step with a message naming the three supported ones. The platforms' own image
 pickers also accept GIF, SVG, HEIC and more, and the API's error for those does not name the
 supported formats, so the integration checks first. The hosted API does not fetch remote image URLs, so an
@@ -169,7 +170,8 @@ Platform notes:
   start-up and `dify plugin package` does not. Provider credential defaults prefill the connection form.
 - **Coze**: plugin parameters have no file type, so images arrive as URL strings. coze.cn cannot reach
   `*.workers.dev`, and image URLs hosted outside mainland China may time out, so the Coze plugin calls
-  the China endpoint. A plugin is published to its space before workflows can use it, and its
+  `https://llm-proxy.openxxlab.com/v1` with a key kept in its code on Coze's servers; plugin users need
+  no key. A plugin is published to its space before workflows can use it, and its
   personal-information statement is "yes", since it sends user input to the Valen API.
 
 Integrations built on `valen-sdk` pass `Valen.remote(f"{host}/v1", headers={"User-Agent": ...})`.

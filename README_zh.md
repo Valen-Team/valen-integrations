@@ -9,7 +9,7 @@
 | 平台 | 目录 | 包 | 状态 |
 | --- | --- | --- | --- |
 | [Dify](https://dify.ai) | [`dify/`](dify/) | `valen` 插件 | 开发中 |
-| [扣子 Coze](https://www.coze.cn) | [`coze/`](coze/) | 扣子插件商店 | 计划中 |
+| [扣子 Coze](https://www.coze.cn) | [`coze/`](coze/) | 扣子插件商店 | 开发中 |
 | [n8n](https://n8n.io) | [`n8n/`](n8n/) | `@valen-team/n8n-nodes-valen` | 计划中 |
 | [LangChain](https://www.langchain.com) | [`langchain/`](langchain/) | `langchain-valen` | 计划中 |
 

@@ -9,7 +9,7 @@ Use Valen in workflow and agent platforms. Ask typed questions about text or an 
 | Platform | Directory | Package | Status |
 | --- | --- | --- | --- |
 | [Dify](https://dify.ai) | [`dify/`](dify/) | `valen` plugin | In development |
-| [Coze](https://www.coze.cn) | [`coze/`](coze/) | Coze plugin store | Planned |
+| [Coze](https://www.coze.cn) | [`coze/`](coze/) | Coze plugin store | In development |
 | [n8n](https://n8n.io) | [`n8n/`](n8n/) | `@valen-team/n8n-nodes-valen` | Planned |
 | [LangChain](https://www.langchain.com) | [`langchain/`](langchain/) | `langchain-valen` | Planned |
 
