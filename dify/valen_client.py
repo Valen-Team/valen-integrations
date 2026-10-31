@@ -4,7 +4,7 @@ from valen_sdk import Valen
 from valen_sdk.errors import ValenAPIError
 from valen_protocol import api_error_message, endpoint, evidence, map_answers, route_answer, single_question, thresholds, validate_questions
 
-USER_AGENT = {'User-Agent': 'valen-dify/0.1.0'}
+USER_AGENT = {'User-Agent': 'valen-dify/0.1.1'}
 
 
 def validate_credentials(credentials):

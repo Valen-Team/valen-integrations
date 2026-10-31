@@ -12,7 +12,7 @@ Give every ticket, image and alert a clear next step. Ask Valen a concrete quest
 | --- | --- | --- |
 | **n8n, self-hosted** | [Install from npm](https://www.npmjs.com/package/@valen-team/n8n-nodes-valen) · [Guide](n8n/README.md) | One node with named routing outputs, preserved input items and a ready-to-import support workflow |
 | **LangChain / LangGraph** | [Install from PyPI](https://pypi.org/project/langchain-valen/) · [Guide](langchain/README.md) | Runnables, conditional routing and an agent tool that fit your existing application |
-| **Dify** | [Download plugin and starter workflow](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.0) · [Guide](dify/README.md) | Four visual tools and a complete ticket-review workflow; no model-provider setup needed |
+| **Dify** | [Download plugin and starter workflow](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.1) · [Guide](dify/README.md) | Four visual tools and a complete ticket-review workflow; no model-provider setup needed |
 | **Coze.cn** | [Open the plugin store](https://www.coze.cn/store/plugin/7702606163640074283) · [Guide](coze/README.md) | Four cloud tools you can add to an agent or workflow without supplying an API key |
 
 The default hosted API needs no key. Dify requires 1.18.0+ and an instance that allows unsigned community plugins; its public package is distributed through GitHub. The n8n package is for self-hosted installations and is not verified for n8n Cloud.

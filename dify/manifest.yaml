@@ -1,4 +1,4 @@
-version: 0.1.0
+version: 0.1.1
 type: plugin
 author: valen-team
 name: valen
@@ -30,3 +30,9 @@ meta:
 created_at: '2026-10-30T08:16:23Z'
 privacy: PRIVACY.md
 verified: false
+repo: https://github.com/Valen-Team/valen-integrations
+network:
+  domains:
+  - api.valen-team.workers.dev
+  - llm-proxy.openxxlab.com
+contact: liuziyu77@sjtu.edu.cn

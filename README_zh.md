@@ -12,7 +12,7 @@
 | --- | --- | --- |
 | **n8n，自托管** | [npm 安装](https://www.npmjs.com/package/@valen-team/n8n-nodes-valen) · [上手指南](n8n/README_zh.md) | 添加一个节点，用具名输出口分流，保留原始工单，并导入现成示例 |
 | **LangChain / LangGraph** | [PyPI 安装](https://pypi.org/project/langchain-valen/) · [上手指南](langchain/README_zh.md) | 直接接入 Runnable、条件分支和 Agent 工具 |
-| **Dify** | [下载插件与示例工作流](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.0) · [上手指南](dify/README_zh.md) | 用四个可视化工具搭建判断与分流，无需配置大模型供应商 |
+| **Dify** | [下载插件与示例工作流](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.1) · [上手指南](dify/readme/README_zh_Hans.md) | 用四个可视化工具搭建判断与分流，无需配置大模型供应商 |
 | **扣子 Coze.cn** | [打开插件商店](https://www.coze.cn/store/plugin/7702606163640074283) · [上手指南](coze/README_zh.md) | 把云端工具加入智能体或工作流，无需自行填写 API 密钥 |
 
 默认托管服务无需密钥。Dify 需要 1.18.0+，且实例允许安装未签名社区插件，当前通过 GitHub 公开分发。n8n 包用于自托管实例，尚未获得 n8n Cloud 认证。

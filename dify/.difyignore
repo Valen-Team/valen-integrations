@@ -175,3 +175,9 @@ Thumbs.db
 # Dify plugin packages
 #  To prevent packaging repetitively
 *.difypkg
+
+# Maintainer and demonstration files are distributed separately.
+examples/
+RELEASING.md
+_assets/icon.svg
+_assets/icon-dark.svg

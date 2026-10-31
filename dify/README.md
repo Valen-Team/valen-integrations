@@ -1,53 +1,45 @@
 # Valen for Dify
 
-[中文](README_zh.md) · [Shared behavior](../SPEC.md)
+[Simplified Chinese](readme/README_zh_Hans.md)
 
-Turn a support ticket into a clear next step: refund review, general support or human review. Valen reads text or an image and returns an answer with probabilities. Use the included workflow to try the complete routing path, then connect your own actions.
+Turn a support ticket into a clear next step, inspect an image, or prioritize an alert. Valen answers concrete questions with probabilities that your workflow can use directly. Keep intermediate Yes/No results on a human-review path and failed requests on a separate error path.
 
-## Install
+## Setup
 
-Requires **Dify 1.18.0+**. In **Integrations → Install → GitHub** (called **Plugins → Install plugin** in older layouts), enter:
+Requires Dify 1.18.0 or newer. Install the Valen tool plugin, then authorize its provider:
 
-```text
-https://github.com/Valen-Team/valen-integrations
-```
+1. Keep the default Base URL, `https://api.valen-team.workers.dev`.
+2. Leave the API key empty for the free hosted API.
+3. Save the connection and add a Valen tool to your workflow.
 
-Choose release **dify-v0.1.0** and asset **valen-0.1.0.difypkg**, then install. You can also [download the package and example workflow](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.0) and use **Local package file**.
+You can also configure `https://llm-proxy.openxxlab.com` with your API key or a trusted self-hosted Valen endpoint. The plugin connects to `/v1/models` and `/v1/decisions`. Keep the key in Dify provider credentials.
 
-This is a GitHub-distributed community plugin; Dify Marketplace review is separate. The package is unsigned, so your Dify instance must permit unsigned community plugins. If your instance requires marketplace signatures, ask your administrator before installing. See [RELEASING.md](RELEASING.md) for administrator configuration.
+The [GitHub release](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.1) provides the community package for instances that allow unsigned plugins. In Dify, use **Integrations → Install → Local Package File** (called **Plugins → Install plugin** in older layouts).
 
-Authorize Valen with the default `https://api.valen-team.workers.dev` base URL and an empty
-key, or use your keyed/self-hosted endpoint. Saving checks `/v1/models`. Credentials stay
-in Dify's provider credential store. Model is editable and defaults to `valen-2b`.
+## Try a support ticket
 
-## Use
+Add **Yes/No** and enter:
 
-- **Yes/No:** input and a concrete statement; returns `probability`, `branch`, `model`.
-  Defaults: yes at ≥0.7, no at ≤0.3, otherwise `unsure`.
-- **Choice:** options, one per line, `value` or `value: description`; returns `choice`,
-  `confidence`, `probabilities`, `branch`, `model`.
-- **Score:** levels, lowest first, with the same line syntax; returns expected index `score`,
-  most likely `level`, `confidence`, `probabilities`, `branch`, `model`.
-- **Evaluate:** a Decisions API questions JSON array; returns `answers` and `model` in JSON.
-  Use a code step for dynamic answer keys. Single-question tools expose declared variables
-  directly to IF/ELSE nodes.
+- **Input:** `I was charged twice. Please refund the duplicate charge.`
+- **Question:** `The customer requests a refund.`
 
-Install and authorize the plugin before importing
-[the starter workflow](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.1.0/support-review.yml) in Studio. The example sends
-a support ticket through Yes/No and explicit refund, normal support and human review paths.
-A separate failure path returns the error and original ticket. End outputs use unique
-refund_, support_, review_ and failure_ prefixes, as Dify requires across all Output nodes. These are output queues;
-the example performs no external business action. The optional image input accepts one file. Self-hosted Dify must configure `FILES_URL`
-and `INTERNAL_FILES_URL` so plugin containers can fetch uploaded files.
-The example contains no account credential ID or plugin package hash.
+The tool returns `probability`, `branch` and `model`. With default thresholds, `branch` is `yes` at 0.7 or above, `no` at 0.3 or below, and `unsure` between them. Connect an IF/ELSE node to these values to choose a refund-review queue, general support or human review. The example returns routing data; your workflow controls business actions.
 
-Failed requests produce tool errors, never a negative judgment. Configure Dify's tool error
-handling and connect its failure branch. Requests retry transient failures twice, with a
-120-second timeout per attempt. For persistent 429 errors wait at least a minute.
-Inputs, questions and images go to the configured API; see [PRIVACY.md](PRIVACY.md).
+[Download the starter workflow](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.1.1/support-review.yml), install and authorize Valen, then import it in Studio. It includes all three routes and a separate request-failure output.
 
-## Upgrade
+## Tools
 
-Download the new version from the same release page and install it in Plugins. Export your workflows first and keep the previous package if you need to roll back. After upgrading, run a sample ticket before reconnecting business actions.
+- **Yes/No:** judge one statement and return its probability and routing branch.
+- **Choice:** select from your named options and return the full probability distribution. Enter one `value: description` per line, including an outside-scope option when needed.
+- **Score:** describe ordered levels from lowest to highest and read the expected index, most likely level and distribution.
+- **Evaluate:** ask multiple named questions about the same input in one request.
 
-[Build and release](RELEASING.md) · [Data handling](PRIVACY.md)
+Each tool accepts text and an optional PNG, JPEG or WebP image. Choose a model ID; the default is `valen-2b`. Probabilities are estimates, so choose review rules for your own application. Request failures raise errors and never become negative answers.
+
+## Privacy and support
+
+Input, questions and optional images go to the configured API. Dify file URLs are downloaded through its plugin SDK. The plugin adds no storage or logs; Dify execution history and endpoint policies still apply. Read [PRIVACY.md](PRIVACY.md) before sending private content.
+
+[Source code](https://github.com/Valen-Team/valen-integrations/tree/main/dify) · [Support and issues](https://github.com/Valen-Team/valen-integrations/issues)
+
+Contact: liuziyu77@sjtu.edu.cn
