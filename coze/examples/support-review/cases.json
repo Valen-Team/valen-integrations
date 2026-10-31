@@ -1,0 +1,81 @@
+[
+  {
+    "name": "yes",
+    "coze_test_input": {
+      "_input": {
+        "input": "I was charged twice for this order. Please refund the duplicate charge.",
+        "question": "The customer requests a refund.",
+        "image": "",
+        "model": "valen-2b",
+        "noAt": 0.3,
+        "yesAt": 0.7
+      }
+    },
+    "expected_destination": "refund"
+  },
+  {
+    "name": "no",
+    "coze_test_input": {
+      "_input": {
+        "input": "I forgot my password and need help signing in.",
+        "question": "The customer requests a refund.",
+        "image": "",
+        "model": "valen-2b",
+        "noAt": 0.3,
+        "yesAt": 0.7
+      }
+    },
+    "expected_destination": "support"
+  },
+  {
+    "name": "unsure",
+    "coze_test_input": {
+      "_input": {
+        "input": "I was charged twice for this order. Please refund the duplicate charge.",
+        "question": "The customer requests a refund.",
+        "image": "",
+        "model": "valen-2b",
+        "noAt": 0.01,
+        "yesAt": 0.99
+      }
+    },
+    "expected_destination": "review"
+  },
+  {
+    "name": "api_error",
+    "coze_test_input": {
+      "_input": {
+        "input": "Synthetic request failure acceptance case.",
+        "question": "The customer requests a refund.",
+        "image": "",
+        "model": "valen-acceptance-invalid-model",
+        "noAt": 0.3,
+        "yesAt": 0.7
+      }
+    },
+    "expected_destination": "request_failure"
+  },
+  {
+    "name": "https_image",
+    "coze_test_input": {
+      "_input": {
+        "input": "Inspect the supplied public logo image.",
+        "question": "The image includes a paw print.",
+        "image": "https://www.baidu.com/img/flexible/logo/pc/result.png",
+        "model": "valen-2b",
+        "noAt": 0.3,
+        "yesAt": 0.7
+      }
+    },
+    "expected_destination": "refund"
+  },
+  {
+    "name": "defaults",
+    "coze_test_input": {
+      "_input": {
+        "input": "I was charged twice for this order. Please refund the duplicate charge."
+      }
+    },
+    "expected_destination": "refund"
+  }
+]

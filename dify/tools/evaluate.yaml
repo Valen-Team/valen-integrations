@@ -1,0 +1,67 @@
+identity:
+  name: evaluate
+  author: valen-team
+  label:
+    en_US: Evaluate
+    zh_Hans: 批量评估
+description:
+  human:
+    en_US: Ask 1–8 named questions in one request
+    zh_Hans: 在一次请求中提出 1–8 个带名称的问题
+  llm: Ask 1–8 named questions in one request
+parameters:
+- name: input
+  type: string
+  required: true
+  label:
+    en_US: Input
+    zh_Hans: 输入
+  human_description:
+    en_US: Text to judge
+    zh_Hans: 待判断的文本
+  llm_description: Text to judge
+  form: llm
+- name: image
+  type: file
+  required: false
+  label:
+    en_US: Image
+    zh_Hans: 图片
+  human_description:
+    en_US: Optional PNG, JPEG or WebP image
+    zh_Hans: 可选的 PNG、JPEG 或 WebP 图片
+  llm_description: Optional PNG, JPEG or WebP image
+  form: llm
+- name: model
+  type: string
+  required: true
+  label:
+    en_US: Model
+    zh_Hans: 模型
+  human_description:
+    en_US: Model ID on your configured server
+    zh_Hans: 配置服务上的模型 ID
+  llm_description: Model ID on your configured server
+  form: llm
+  default: valen-2b
+- name: questions
+  type: string
+  required: true
+  label:
+    en_US: Questions JSON
+    zh_Hans: 问题 JSON
+  human_description:
+    en_US: Decisions API JSON array of 1–8 named questions
+    zh_Hans: Decisions API 格式的 JSON 数组，包含 1–8 个带名称的问题
+  llm_description: Decisions API JSON array of 1–8 named questions
+  form: llm
+output_schema:
+  type: object
+  properties:
+    model:
+      type: string
+    answers:
+      type: object
+extra:
+  python:
+    source: tools/evaluate.py

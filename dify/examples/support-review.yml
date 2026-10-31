@@ -1,0 +1,560 @@
+app:
+  description: Judge refund intent with explicit yes/no/unsure paths and a separate
+    request-failure path. No external business actions.
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: workflow
+  name: Valen support review
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+site:
+  chat_color_theme: null
+  chat_color_theme_inverted: false
+  copyright: null
+  custom_disclaimer: ''
+  default_language: en-US
+  description: null
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  input_placeholder: null
+  privacy_policy: null
+  show_workflow_steps: true
+  title: Valen support review
+  use_icon_as_answer_icon: false
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      enabled: true
+      allowed_file_types:
+      - image
+      allowed_file_extensions:
+      - .png
+      - .jpg
+      - .jpeg
+      - .webp
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      number_limits: 1
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - id: 1793353615190-source-1793353770298
+      type: custom
+      source: '1793353615190'
+      sourceHandle: source
+      target: '1793353770298'
+      targetHandle: target
+      data:
+        sourceType: start
+        targetType: tool
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    - id: 1793353770298-source-1793354301177
+      type: custom
+      source: '1793353770298'
+      sourceHandle: source
+      target: '1793354301177'
+      targetHandle: target
+      data:
+        sourceType: tool
+        targetType: if-else
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    - id: 1793354301177-true-valen-refund
+      type: custom
+      source: '1793354301177'
+      sourceHandle: 'true'
+      target: valen-refund
+      targetHandle: target
+      data:
+        sourceType: if-else
+        targetType: end
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    - id: 1793354301177-no-refund-valen-normal
+      type: custom
+      source: '1793354301177'
+      sourceHandle: no-refund
+      target: valen-normal
+      targetHandle: target
+      data:
+        sourceType: if-else
+        targetType: end
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    - id: 1793354301177-false-valen-unsure
+      type: custom
+      source: '1793354301177'
+      sourceHandle: 'false'
+      target: valen-unsure
+      targetHandle: target
+      data:
+        sourceType: if-else
+        targetType: end
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    - id: 1793353770298-fail-branch-valen-error
+      type: custom
+      source: '1793353770298'
+      sourceHandle: fail-branch
+      target: valen-error
+      targetHandle: target
+      data:
+        sourceType: tool
+        targetType: end
+        isInIteration: false
+        isInLoop: false
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: User Input
+        type: start
+        variables:
+        - variable: ticket
+          label: Support ticket
+          description: Synthetic ticket text to judge
+          type: paragraph
+          required: true
+          max_length: 32000
+          options: []
+          default: ''
+        - variable: image
+          label: Optional image
+          type: file
+          required: false
+          allowed_file_types:
+          - image
+          allowed_file_extensions:
+          - .png
+          - .jpg
+          - .jpeg
+          - .webp
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+      height: 73
+      id: '1793353615190'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        error_strategy: fail-branch
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Text to judge
+            ja_JP: Text to judge
+            pt_BR: Text to judge
+            zh_Hans: Text to judge
+          input_schema: null
+          label:
+            en_US: Input
+            ja_JP: Input
+            pt_BR: Input
+            zh_Hans: Input
+          llm_description: Text to judge
+          multiple: false
+          name: input
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Optional PNG, JPEG or WebP image
+            ja_JP: Optional PNG, JPEG or WebP image
+            pt_BR: Optional PNG, JPEG or WebP image
+            zh_Hans: Optional PNG, JPEG or WebP image
+          input_schema: null
+          label:
+            en_US: Image
+            ja_JP: Image
+            pt_BR: Image
+            zh_Hans: Image
+          llm_description: Optional PNG, JPEG or WebP image
+          multiple: false
+          name: image
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: file
+        - auto_generate: null
+          default: valen-2b
+          form: llm
+          human_description:
+            en_US: Model ID on your configured server
+            ja_JP: Model ID on your configured server
+            pt_BR: Model ID on your configured server
+            zh_Hans: Model ID on your configured server
+          input_schema: null
+          label:
+            en_US: Model
+            ja_JP: Model
+            pt_BR: Model
+            zh_Hans: Model
+          llm_description: Model ID on your configured server
+          multiple: false
+          name: model
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: A concrete judgment about the input
+            ja_JP: A concrete judgment about the input
+            pt_BR: A concrete judgment about the input
+            zh_Hans: A concrete judgment about the input
+          input_schema: null
+          label:
+            en_US: Question
+            ja_JP: Question
+            pt_BR: Question
+            zh_Hans: Question
+          llm_description: A concrete judgment about the input
+          multiple: false
+          name: question
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: 0.7
+          form: form
+          human_description:
+            en_US: Yes when probability is at least this threshold
+            ja_JP: Yes when probability is at least this threshold
+            pt_BR: Yes when probability is at least this threshold
+            zh_Hans: Yes when probability is at least this threshold
+          input_schema: null
+          label:
+            en_US: Yes at
+            ja_JP: Yes at
+            pt_BR: Yes at
+            zh_Hans: Yes at
+          llm_description: Yes when probability is at least this threshold
+          multiple: false
+          name: yes_at
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: number
+        - auto_generate: null
+          default: 0.3
+          form: form
+          human_description:
+            en_US: No when probability is at most this threshold
+            ja_JP: No when probability is at most this threshold
+            pt_BR: No when probability is at most this threshold
+            zh_Hans: No when probability is at most this threshold
+          input_schema: null
+          label:
+            en_US: No at
+            ja_JP: No at
+            pt_BR: No at
+            zh_Hans: No at
+          llm_description: No when probability is at most this threshold
+          multiple: false
+          name: no_at
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: number
+        params:
+          image: ''
+          input: ''
+          model: ''
+          no_at: ''
+          question: ''
+          yes_at: ''
+        plugin_id: valen-team/valen
+        provider_id: valen-team/valen/valen
+        provider_name: valen-team/valen/valen
+        provider_show_name: Valen
+        provider_type: builtin
+        selected: false
+        title: Yes/No
+        tool_configurations:
+          no_at:
+            type: constant
+            value: 0.3
+          yes_at:
+            type: constant
+            value: 0.7
+        tool_description: Get a yes/no probability and yes/no/unsure branch
+        tool_label: Yes/No
+        tool_name: yes_no
+        tool_node_version: '2'
+        tool_parameters:
+          image:
+            type: variable
+            value:
+            - '1793353615190'
+            - image
+          input:
+            type: mixed
+            value: '{{#1793353615190.ticket#}}'
+          model:
+            type: mixed
+            value: valen-2b
+          question:
+            type: mixed
+            value: The customer requests a refund.
+        type: tool
+      height: 150
+      id: '1793353770298'
+      position:
+        x: 382
+        y: 282
+      positionAbsolute:
+        x: 382
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: f8449954-e239-47d6-837c-c7cb1738e3e9
+            value: 'yes'
+            varType: string
+            variable_selector:
+            - '1793353770298'
+            - branch
+          logical_operator: and
+        - case_id: no-refund
+          logical_operator: and
+          conditions:
+          - id: no-refund-condition
+            comparison_operator: is
+            varType: string
+            variable_selector:
+            - '1793353770298'
+            - branch
+            value: 'no'
+        selected: false
+        title: Route the judgment
+        type: if-else
+      height: 124
+      id: '1793354301177'
+      position:
+        x: 684
+        y: 282
+      positionAbsolute:
+        x: 684
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        type: end
+        title: Refund queue
+        selected: false
+        outputs:
+        - variable: refund_branch
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - branch
+        - variable: refund_probability
+          value_type: number
+          value_selector:
+          - '1793353770298'
+          - probability
+        - variable: refund_model
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - model
+        - variable: refund_ticket
+          value_type: string
+          value_selector:
+          - '1793353615190'
+          - ticket
+      height: 88
+      id: valen-refund
+      position:
+        x: 1000
+        y: 100
+      positionAbsolute:
+        x: 1000
+        y: 100
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        type: end
+        title: Normal support
+        selected: false
+        outputs:
+        - variable: support_branch
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - branch
+        - variable: support_probability
+          value_type: number
+          value_selector:
+          - '1793353770298'
+          - probability
+        - variable: support_model
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - model
+        - variable: support_ticket
+          value_type: string
+          value_selector:
+          - '1793353615190'
+          - ticket
+      height: 88
+      id: valen-normal
+      position:
+        x: 1000
+        y: 300
+      positionAbsolute:
+        x: 1000
+        y: 300
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        type: end
+        title: Human review
+        selected: false
+        outputs:
+        - variable: review_branch
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - branch
+        - variable: review_probability
+          value_type: number
+          value_selector:
+          - '1793353770298'
+          - probability
+        - variable: review_model
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - model
+        - variable: review_ticket
+          value_type: string
+          value_selector:
+          - '1793353615190'
+          - ticket
+      height: 88
+      id: valen-unsure
+      position:
+        x: 1000
+        y: 500
+      positionAbsolute:
+        x: 1000
+        y: 500
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        type: end
+        title: Request failure
+        selected: false
+        outputs:
+        - variable: failure_error_type
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - error_type
+        - variable: failure_error_message
+          value_type: string
+          value_selector:
+          - '1793353770298'
+          - error_message
+        - variable: failure_ticket
+          value_type: string
+          value_selector:
+          - '1793353615190'
+          - ticket
+      height: 88
+      id: valen-error
+      position:
+        x: 1000
+        y: 700
+      positionAbsolute:
+        x: 1000
+        y: 700
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 0
+      y: 50
+      zoom: 0.7
+  rag_pipeline_variables: []

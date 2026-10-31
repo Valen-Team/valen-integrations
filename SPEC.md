@@ -158,7 +158,7 @@ records for each run. How the hosted API handles requests is described in
 | Evaluate | Evaluate operation | Evaluate tool (JSON output) | Evaluate tool (JSON output) | `ValenEvaluator` runnable |
 | Single question | Route operation, one output per branch | Yes/No, Choice and Score tools | Yes/No, Choice and Score tools | `ValenDecisionTool`, `ValenRouter` for `RunnableBranch` and LangGraph edges |
 | Language | TypeScript, no runtime dependencies | Python 3.12, `valen-sdk` | Python in the Coze IDE | Python, `valen-sdk` |
-| Release | GitHub Actions with npm provenance from `n8n/` (`repository.directory: "n8n"`), tag `n8n-v*` | PR to `langgenius/dify-plugins` | Coze store review | GitHub Actions to PyPI, tag `langchain-v*` |
+| Release | GitHub Actions with npm provenance from `n8n/` (`repository.directory: "n8n"`), tag `n8n-v*` | Public GitHub Release; PR to `langgenius/dify-plugins` for Marketplace listing | Coze store review | GitHub Actions to PyPI, tag `langchain-v*` |
 
 Platform notes:
 
@@ -176,5 +176,6 @@ Platform notes:
 
 Integrations built on `valen-sdk` pass `Valen.remote(f"{host}/v1", headers={"User-Agent": ...})`.
 
-Each platform directory has its own README, tests and release workflow. A behaviour change starts in
-this file.
+Implemented platforms document their tests and release process in their directory. Placeholder directories are not installable integrations. A behaviour change starts in this file.
+
+The n8n package installs from npm on self-hosted instances. Evaluate takes Raw JSON questions. With Continue (using error output), errors carry `error` and `details.input` (the original input) and leave through n8n’s separate Error port, without a normal answer or branch. The example wires that port to Request failure. Legacy regular-output continuation leaves errors on `unsure` for Yes/No or the first port otherwise; use Stop Workflow or the separate Error port for action routing. n8n Cloud verification is separate from public npm distribution.

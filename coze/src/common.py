@@ -71,23 +71,20 @@ def _evidence(text, image_url):
 
 def _ask(args, questions):
     """POST /v1/decisions and return (answers, model)."""
+    questions = validate_questions(questions)
     i = args.input
     body = {"model": getattr(i, "model", None) or "valen-2b",
             "input": _evidence(i.input, getattr(i, "image", None)), "questions": questions}
     headers = {"Content-Type": "application/json", **({"Authorization": "Bearer " + API_KEY} if API_KEY else {})}
     _, data = _fetch(BASE_URL + "/decisions", json.dumps(body, ensure_ascii=False).encode("utf-8"), headers)
     result = json.loads(data)
-    return result["answers"], result.get("model_id") or result.get("model")
+    mapped = map_answers(result, questions)
+    return result["answers"], mapped["model"]
 
 
 def _lines(text):
     """`value` or `value: description` per line; a missing description repeats the value (SPEC §2.2)."""
-    pairs = []
-    for line in (text or "").splitlines():
-        if line.strip():
-            value, _, description = line.partition(": ")
-            pairs.append((value.strip(), description.strip() or value.strip()))
-    return pairs
+    return parse_lines(text)
 
 
 def _answer(answer):

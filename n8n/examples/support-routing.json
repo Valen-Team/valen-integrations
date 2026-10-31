@@ -1,0 +1,154 @@
+{
+  "name": "Valen \u2014 synthetic support routing",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "start",
+      "name": "Run example",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{ticket:'I was charged twice. Please help.'}},{json:{ticket:'The app crashes when I open settings.'}},{json:{ticket:'Can you recommend a birthday gift?'}}];"
+      },
+      "id": "samples",
+      "name": "Synthetic tickets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "route",
+        "model": "valen-2b",
+        "inputFormat": "text",
+        "input": "={{$json.ticket}}",
+        "questionType": "choice",
+        "question": "Which team should handle this ticket?",
+        "options": "billing: Payments, duplicate charges and refunds\ntechnical: Software bugs and crashes\nreview: Outside billing and technical support, or too little information"
+      },
+      "id": "valen",
+      "name": "Route tickets",
+      "type": "@valen-team/n8n-nodes-valen.valen",
+      "typeVersion": 1,
+      "position": [
+        460,
+        0
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "id": "Billing",
+      "name": "Billing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -160
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "Technical",
+      "name": "Technical",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "Human review",
+      "name": "Human review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        160
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "failure-review",
+      "name": "Request failure",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        720,
+        320
+      ]
+    }
+  ],
+  "connections": {
+    "Run example": {
+      "main": [
+        [
+          {
+            "node": "Synthetic tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Synthetic tickets": {
+      "main": [
+        [
+          {
+            "node": "Route tickets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route tickets": {
+      "main": [
+        [
+          {
+            "node": "Billing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Technical",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Human review",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Request failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {}
+}

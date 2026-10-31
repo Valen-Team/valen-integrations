@@ -1,0 +1,132 @@
+{
+  "format": "manual configuration recipe; not an importable Coze DSL export",
+  "name": "Valen_support_review",
+  "validated_date": "2026-10-31",
+  "purpose": "Synthetic support routing only; no real refund or notification actions",
+  "start": {
+    "input": {
+      "type": "String",
+      "required": true
+    },
+    "image": {
+      "type": "String",
+      "required": false,
+      "description": "Optional downloadable PNG, JPEG or WebP URL"
+    },
+    "question": {
+      "type": "String",
+      "required": false,
+      "default": "The customer requests a refund."
+    },
+    "model": {
+      "type": "String",
+      "required": false,
+      "default": "valen-2b"
+    },
+    "yesAt": {
+      "type": "Number",
+      "required": false,
+      "default": 0.7
+    },
+    "noAt": {
+      "type": "Number",
+      "required": false,
+      "default": 0.3
+    }
+  },
+  "yes_no": {
+    "plugin": "Valen 万澜",
+    "inputs": {
+      "input": "Start.input",
+      "question": "Start.question",
+      "image": "Start.image",
+      "model": "Start.model",
+      "yes_at": "Start.yesAt",
+      "no_at": "Start.noAt"
+    },
+    "timeout_seconds": 420,
+    "workflow_retry": "none; the plugin retries transient failures internally",
+    "error_handling": "execute exception flow"
+  },
+  "selector": {
+    "input": "yes_no.branch",
+    "yes": "Refund queue",
+    "no": "Support queue",
+    "else": "Review queue"
+  },
+  "destinations": {
+    "Refund queue": {
+      "code": "refund.ts",
+      "inputs": {
+        "input": "Start.input",
+        "branch": "yes_no.branch",
+        "probability": "yes_no.probability",
+        "model": "yes_no.model"
+      },
+      "outputs": {
+        "result": "Object"
+      }
+    },
+    "Support queue": {
+      "code": "support.ts",
+      "inputs": {
+        "input": "Start.input",
+        "branch": "yes_no.branch",
+        "probability": "yes_no.probability",
+        "model": "yes_no.model"
+      },
+      "outputs": {
+        "result": "Object"
+      }
+    },
+    "Review queue": {
+      "code": "review.ts",
+      "inputs": {
+        "input": "Start.input",
+        "branch": "yes_no.branch",
+        "probability": "yes_no.probability",
+        "model": "yes_no.model"
+      },
+      "outputs": {
+        "result": "Object"
+      }
+    },
+    "Request failure": {
+      "source": "yes_no error port",
+      "code": "failure.ts",
+      "inputs": {
+        "input": "Start.input",
+        "errorBody": "yes_no.errorBody"
+      },
+      "outputs": {
+        "result": "Object"
+      }
+    }
+  },
+  "merge": {
+    "strategy": "first nonempty value in each group",
+    "groups": {
+      "Group1": {
+        "type": "Object",
+        "values": [
+          "Refund queue.result",
+          "Support queue.result",
+          "Review queue.result",
+          "Request failure.result"
+        ]
+      }
+    },
+    "incoming_connections": [
+      "Refund queue",
+      "Support queue",
+      "Review queue",
+      "Request failure"
+    ]
+  },
+  "end": {
+    "outputs": {
+      "result": "Variable merge.Group1"
+    }
+  },
+  "export_status": "Native workflow export opens a paid-plan prompt on the current account; this recipe is not a replacement DSL export."
+}

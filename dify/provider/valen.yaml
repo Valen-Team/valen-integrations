@@ -1,0 +1,38 @@
+identity:
+  author: valen-team
+  name: valen
+  label:
+    en_US: Valen
+    zh_Hans: Valen 万澜
+  description:
+    en_US: Typed decisions for text and images
+    zh_Hans: 文本与图片的结构化判断
+  icon: valen.png
+credentials_for_provider:
+  base_url:
+    type: text-input
+    required: true
+    default: https://api.valen-team.workers.dev
+    label:
+      en_US: Base URL
+      zh_Hans: 服务地址
+    placeholder:
+      en_US: https://api.valen-team.workers.dev
+      zh_Hans: https://api.valen-team.workers.dev
+  api_key:
+    type: secret-input
+    required: false
+    label:
+      en_US: API key (optional)
+      zh_Hans: API 密钥（可选）
+    placeholder:
+      en_US: Leave empty for the free API
+      zh_Hans: 免费 API 留空
+tools:
+- tools/yes_no.yaml
+- tools/choice.yaml
+- tools/score.yaml
+- tools/evaluate.yaml
+extra:
+  python:
+    source: provider/valen.py

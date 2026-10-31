@@ -1,0 +1,32 @@
+version: 0.1.0
+type: plugin
+author: valen-team
+name: valen
+label:
+  en_US: Valen
+  zh_Hans: Valen 万澜
+description:
+  en_US: Typed decisions and probabilities for text and images
+  ja_JP: Typed decisions and probabilities for text and images
+  zh_Hans: 为文本和图片提供有类型的判断与概率
+  pt_BR: Typed decisions and probabilities for text and images
+icon: valen.png
+resource:
+  memory: 268435456
+  permission: {}
+plugins:
+  tools:
+  - provider/valen.yaml
+meta:
+  version: 0.0.1
+  arch:
+  - amd64
+  - arm64
+  runner:
+    language: python
+    version: '3.12'
+    entrypoint: main
+  minimum_dify_version: 1.18.0
+created_at: '2026-10-30T08:16:23Z'
+privacy: PRIVACY.md
+verified: false

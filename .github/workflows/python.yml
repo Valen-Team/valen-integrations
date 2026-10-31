@@ -1,0 +1,49 @@
+name: Python integrations
+on:
+  push:
+    paths: ['shared/**', 'scripts/**', 'dify/**', 'coze/**', 'langchain/**', 'tests/**', '.github/workflows/python.yml']
+  pull_request:
+    paths: ['shared/**', 'scripts/**', 'dify/**', 'coze/**', 'langchain/**', 'tests/**', '.github/workflows/python.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract-and-wheel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r dify/requirements.txt -e './langchain[test]'
+      - run: python scripts/build_shared.py --check
+      - run: python coze/build.py --check
+      - run: python -m pytest tests coze/tests
+      - run: python -m build langchain --outdir artifacts/langchain
+      - run: python -m twine check artifacts/langchain/*
+      - name: Verify clean wheel installation
+        run: |
+          python -m venv /tmp/valen-wheel
+          /tmp/valen-wheel/bin/python -m pip install artifacts/langchain/*.whl 'langgraph>=1,<2' pytest
+          project_dir="$PWD"
+          cd /tmp
+          /tmp/valen-wheel/bin/python -c 'from langchain_valen import ValenEvaluator, ValenRouter, ValenDecisionTool'
+          /tmp/valen-wheel/bin/python -m pytest "$project_dir/tests/test_python_integrations.py" -k 'not dify'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: valen-langchain-package
+          path: artifacts/langchain/*
+  dify-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install official Dify CLI 0.6.12
+        run: |
+          curl --fail --location --retry 2 https://github.com/langgenius/dify-plugin-daemon/releases/download/0.6.12/dify-plugin-linux-amd64 -o /tmp/dify
+          echo 'f5190893643492c3f17f12c9752615a5652e47bbf30e84298634e176611aa108  /tmp/dify' | sha256sum --check
+          chmod +x /tmp/dify
+      - run: /tmp/dify plugin package dify -o valen.difypkg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: valen-dify-package
+          path: valen.difypkg

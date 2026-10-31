@@ -1,0 +1,30 @@
+name: n8n package
+on:
+  push:
+    paths: ['n8n/**', '.github/workflows/n8n.yml']
+  pull_request:
+    paths: ['n8n/**', '.github/workflows/n8n.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test-and-pack:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: n8n
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: n8n/package-lock.json
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm pack
+      - run: node scripts/check-package.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: valen-n8n-package
+          path: n8n/*.tgz

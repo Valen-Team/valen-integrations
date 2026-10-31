@@ -1,0 +1,93 @@
+identity:
+  name: yes_no
+  author: valen-team
+  label:
+    en_US: Yes/No
+    zh_Hans: 是否判断
+description:
+  human:
+    en_US: Get a yes/no probability and yes/no/unsure branch
+    zh_Hans: 返回是的概率及 yes、no、unsure 分支
+  llm: Get a yes/no probability and yes/no/unsure branch
+parameters:
+- name: input
+  type: string
+  required: true
+  label:
+    en_US: Input
+    zh_Hans: 输入
+  human_description:
+    en_US: Text to judge
+    zh_Hans: 待判断的文本
+  llm_description: Text to judge
+  form: llm
+- name: image
+  type: file
+  required: false
+  label:
+    en_US: Image
+    zh_Hans: 图片
+  human_description:
+    en_US: Optional PNG, JPEG or WebP image
+    zh_Hans: 可选的 PNG、JPEG 或 WebP 图片
+  llm_description: Optional PNG, JPEG or WebP image
+  form: llm
+- name: model
+  type: string
+  required: true
+  label:
+    en_US: Model
+    zh_Hans: 模型
+  human_description:
+    en_US: Model ID on your configured server
+    zh_Hans: 配置服务上的模型 ID
+  llm_description: Model ID on your configured server
+  form: llm
+  default: valen-2b
+- name: question
+  type: string
+  required: true
+  label:
+    en_US: Question
+    zh_Hans: 判断问题
+  human_description:
+    en_US: A concrete judgment about the input
+    zh_Hans: 针对输入的具体判断
+  llm_description: A concrete judgment about the input
+  form: llm
+- name: yes_at
+  type: number
+  required: false
+  label:
+    en_US: Yes at
+    zh_Hans: 肯定阈值
+  human_description:
+    en_US: Yes when probability is at least this threshold
+    zh_Hans: 概率不低于此阈值时进入 yes 分支
+  llm_description: Yes when probability is at least this threshold
+  form: form
+  default: 0.7
+- name: no_at
+  type: number
+  required: false
+  label:
+    en_US: No at
+    zh_Hans: 否定阈值
+  human_description:
+    en_US: No when probability is at most this threshold
+    zh_Hans: 概率不高于此阈值时进入 no 分支
+  llm_description: No when probability is at most this threshold
+  form: form
+  default: 0.3
+output_schema:
+  type: object
+  properties:
+    model:
+      type: string
+    branch:
+      type: string
+    probability:
+      type: number
+extra:
+  python:
+    source: tools/yes_no.py

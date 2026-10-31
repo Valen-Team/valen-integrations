@@ -1,0 +1,74 @@
+name: Release packages
+on:
+  push:
+    tags: ['n8n-v*', 'langchain-v*']
+permissions:
+  contents: read
+jobs:
+  npm:
+    if: startsWith(github.ref, 'refs/tags/n8n-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: n8n
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Check tag matches package
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node -e 'if (process.env.RELEASE_TAG !== "n8n-v" + require("./package.json").version) process.exit(1)'
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm pack
+      - run: node scripts/check-package.cjs
+      - run: npm publish ./valen-team-n8n-nodes-valen-*.tgz --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  python-build:
+    if: startsWith(github.ref, 'refs/tags/langchain-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r dify/requirements.txt -e './langchain[test]'
+      - name: Check tag matches package
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python -c 'import os,tomllib; p=tomllib.load(open("langchain/pyproject.toml","rb")); assert os.environ["RELEASE_TAG"]=="langchain-v"+p["project"]["version"]'
+      - run: python scripts/build_shared.py --check
+      - run: python -m pytest tests coze/tests
+      - run: python -m build langchain --outdir artifacts
+      - run: python -m twine check artifacts/*
+      - name: Validate installable wheel
+        run: |
+          python -m venv /tmp/valen-release-wheel
+          /tmp/valen-release-wheel/bin/python -m pip install artifacts/*.whl 'langgraph>=1,<2' pytest
+          project_dir="$PWD"
+          cd /tmp
+          /tmp/valen-release-wheel/bin/python -m pytest "$project_dir/tests/test_python_integrations.py" -k 'not dify'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-release
+          path: artifacts/*
+  pypi:
+    needs: python-build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-release
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}

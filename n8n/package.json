@@ -1,0 +1,46 @@
+{
+  "name": "@valen-team/n8n-nodes-valen",
+  "version": "0.1.0",
+  "description": "Valen typed decisions and uncertainty-aware routing for n8n",
+  "license": "MIT",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Valen-Team/valen-integrations.git",
+    "directory": "n8n"
+  },
+  "engines": {
+    "node": ">=22.16"
+  },
+  "files": [
+    "dist",
+    "examples",
+    "LICENSE",
+    "README_zh.md",
+    "RELEASING.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.cjs",
+    "test": "npm run build && node --test tests/*.test.cjs",
+    "prepack": "npm run build"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/ValenApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Valen/Valen.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "n8n-workflow": "2.16.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}

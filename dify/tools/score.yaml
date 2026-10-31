@@ -1,0 +1,87 @@
+identity:
+  name: score
+  author: valen-team
+  label:
+    en_US: Score
+    zh_Hans: 评分
+description:
+  human:
+    en_US: Score ordered levels and select the most likely level
+    zh_Hans: 计算有序等级的期望分数并选择最可能的等级
+  llm: Score ordered levels and select the most likely level
+parameters:
+- name: input
+  type: string
+  required: true
+  label:
+    en_US: Input
+    zh_Hans: 输入
+  human_description:
+    en_US: Text to judge
+    zh_Hans: 待判断的文本
+  llm_description: Text to judge
+  form: llm
+- name: image
+  type: file
+  required: false
+  label:
+    en_US: Image
+    zh_Hans: 图片
+  human_description:
+    en_US: Optional PNG, JPEG or WebP image
+    zh_Hans: 可选的 PNG、JPEG 或 WebP 图片
+  llm_description: Optional PNG, JPEG or WebP image
+  form: llm
+- name: model
+  type: string
+  required: true
+  label:
+    en_US: Model
+    zh_Hans: 模型
+  human_description:
+    en_US: Model ID on your configured server
+    zh_Hans: 配置服务上的模型 ID
+  llm_description: Model ID on your configured server
+  form: llm
+  default: valen-2b
+- name: question
+  type: string
+  required: true
+  label:
+    en_US: Question
+    zh_Hans: 判断问题
+  human_description:
+    en_US: A concrete judgment about the input
+    zh_Hans: 针对输入的具体判断
+  llm_description: A concrete judgment about the input
+  form: llm
+- name: levels
+  type: string
+  required: true
+  label:
+    en_US: Levels
+    zh_Hans: 等级
+  human_description:
+    en_US: '2–16 distinct lines: value or value: description; levels lowest first'
+    zh_Hans: '每行一个，共 2–16 个不同选项；格式为值或值: 描述；等级从低到高'
+  llm_description: '2–16 distinct lines: value or value: description; levels lowest
+    first'
+  form: llm
+output_schema:
+  type: object
+  properties:
+    model:
+      type: string
+    branch:
+      type: string
+    confidence:
+      type: number
+    probabilities:
+      type: object
+    score:
+      type: number
+    level:
+      type: string
+extra:
+  python:
+    source: tools/score.py
