@@ -14,7 +14,7 @@ people can see and change them.
 | --- | --- | --- |
 | Base URL | `https://api.valen-team.workers.dev` | The free hosted API. The Coze plugin uses the keyed API instead (see §8). The keyed API is `https://llm-proxy.openxxlab.com`; a self-hosted `valen serve` also works. Entered with or without a trailing `/` or `/v1`; requests go to `{host}/v1/...`. The field stays editable. |
 | API key | empty | Sent as `Authorization: Bearer <key>` only when set. The free API needs none. Stored as a secret. |
-| Model | `valen-2b` | Free text. The hosted APIs serve `valen-0.8b`, `valen-2b` and `valen-4b`; a self-hosted server serves the name it was started with. Where a platform can load choices, it lists the IDs from `GET {host}/v1/models` that start with `valen`. |
+| Model | `valen-2b` | Free text. The hosted APIs serve `valen-0.8b`, `valen-2b` and `valen-4b`, which run Valen-Decision-1.5 0.8B, 2B and 4B; a self-hosted server serves the name it was started with. Where a platform can load choices, it lists the IDs from `GET {host}/v1/models` that start with `valen`. |
 
 Saving a connection checks it with `GET {host}/v1/models`.
 
