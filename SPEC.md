@@ -57,13 +57,15 @@ optional image as `""`; an empty value means no image.
 ### 2.2 Questions
 
 Each question has an **ID**, a **type**, **instructions**, and for Choice and Score its options or
-levels.
+levels. A Locate question's instructions describe what to find in the image, for example
+`The blue mug.`; the step needs an image.
 
 | Type shown | API `type` | Extra field |
 | --- | --- | --- |
 | Yes/No | `predicate` | none |
 | Choice | `choice` | **Options** → `choices: [{value, description}]`: one per line, `value` or `value: description` |
 | Score | `score` | **Levels** → `levels: [{label, description}]`: one per line, lowest first, `label` or `label: description` |
+| Locate | `bbox` | none |
 
 - The ID becomes the question's `name` and the key of its answer. IDs use letters, digits and `_`,
   and are unique within a step.
@@ -85,6 +87,7 @@ the API's `400` message, which names the limit.
 | Yes/No | `probability`: probability that the answer is yes |
 | Choice | `choice`: the most likely option; `confidence`; `probabilities` by option value |
 | Score | `score`: expected level index from 0; `level`: label of the most likely level, the lower one on a tie; `confidence`; `probabilities` by level label |
+| Locate | `bbox`: `[x1, y1, x2, y2]`; `point`: `[x, y]` inside the box; `confidence`. Coordinates are fractions of the image's width and height, from the top-left corner |
 
 The API returns `answers` as a list in request order and `probabilities` as lists of
 `{value or label, probability}`; integrations key them by `name`, `value` and `label`, and compute
@@ -101,7 +104,8 @@ ID:
   "answers": {
     "refund":  {"probability": 0.161},
     "team":    {"choice": "billing", "confidence": 0.998, "probabilities": {"billing": 0.999, "tech": 0.001}},
-    "urgency": {"score": 0.9998, "level": "high", "confidence": 0.9995, "probabilities": {"low": 0.0002, "high": 0.9998}}
+    "urgency": {"score": 0.9998, "level": "high", "confidence": 0.9995, "probabilities": {"low": 0.0002, "high": 0.9998}},
+    "mug":     {"bbox": [0.304, 0.319, 0.875, 0.815], "point": [0.59, 0.567], "confidence": 0.931}
   },
   "model": "valen-2b"
 }
@@ -123,7 +127,10 @@ plus `model` and `branch`:
 | Choice | The `choice` value |
 | Score | The `level` label |
 
-On Dify and Coze these are the Yes/No, Choice and Score tools, and condition nodes read `branch` or
+A Locate answer has no `branch`: the single-question step returns `bbox`, `point`, `confidence` and
+`model`, and Route and the LangChain router take Yes/No, Choice and Score questions.
+
+On Dify and Coze these are the Yes/No, Choice, Score and Locate tools, and condition nodes read `branch` or
 the numbers directly. Route on n8n sends the item down the output named by `branch`, with the answer
 added under `valen`; Route takes its question from form fields, so the set of outputs is fixed when the
 step is set up. The LangChain router returns `branch` as the route key: LangGraph uses it in
@@ -156,7 +163,7 @@ records for each run. How the hosted API handles requests is described in
 | --- | --- | --- | --- | --- |
 | Package | `@valen-team/n8n-nodes-valen` (npm) | `valen` plugin (`.difypkg`) | Coze plugin store | `langchain-valen` (PyPI) |
 | Evaluate | Evaluate operation | Evaluate tool (JSON output) | Evaluate tool (JSON output) | `ValenEvaluator` runnable |
-| Single question | Route operation, one output per branch | Yes/No, Choice and Score tools | Yes/No, Choice and Score tools | `ValenDecisionTool`, `ValenRouter` for `RunnableBranch` and LangGraph edges |
+| Single question | Route operation, one output per branch; Locate through Evaluate | Yes/No, Choice, Score and Locate tools | Yes/No, Choice, Score and Locate tools | `ValenDecisionTool`, `ValenRouter` for `RunnableBranch` and LangGraph edges; Locate through `ValenEvaluator` |
 | Language | TypeScript, no runtime dependencies | Python 3.12, `valen-sdk` | Python in the Coze IDE | Python, `valen-sdk` |
 | Release | GitHub Actions with npm provenance from `n8n/` (`repository.directory: "n8n"`), tag `n8n-v*` | Public GitHub Release; PR to `langgenius/dify-plugins` for Marketplace listing | Coze store review | GitHub Actions to PyPI, tag `langchain-v*` |
 

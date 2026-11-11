@@ -12,7 +12,7 @@
 
 无需填写 API 密钥。工具返回 `probability`、`branch`（`yes`、`no`、`unsure`）和 `model`。在条件节点中读取 `branch`，就能把明确结果与人工复核分别连接到后续步骤；请求失败使用独立错误出口。
 
-**Choice** 从具名选项中单选，**Score** 判断有序等级，**Evaluate** 一次回答多个问题。可选 `image` 接受可下载的 PNG、JPEG 或 WebP 图片 URL。输入和图片会发送到 Valen 服务，见[数据处理说明](PRIVACY.md)。
+**Choice** 从具名选项中单选，**Score** 判断有序等级，**Locate** 返回图片中所描述目标的边界框，**Evaluate** 一次回答多个问题。可选 `image` 接受可下载的 PNG、JPEG 或 WebP 图片 URL。输入和图片会发送到 Valen 服务，见[数据处理说明](PRIVACY.md)。
 
 需要完整示例时，可按[工单复核配置](examples/support-review/recipe.json)和同目录的代码节点、测试输入搭建。它是手动配置说明，不是可导入的扣子 DSL。示例只返回队列数据，不执行退款或发送消息。
 
@@ -48,6 +48,7 @@
 | `yes_no` | `question`（String，必填）、`yes_at`（Number，默认 0.7）、`no_at`（Number，默认 0.3） | `probability`、`branch`（`yes` / `no` / `unsure`）、`model` |
 | `choice` | `question`（String，必填）、`options`（String，必填：每行一个，`值` 或 `值: 说明`） | `choice`、`confidence`、`probabilities`、`branch`（即所选项）、`model` |
 | `score` | `question`（String，必填）、`levels`（String，必填：每行一级，从低到高，`标签` 或 `标签: 说明`） | `score`、`level`、`confidence`、`probabilities`、`branch`（即最可能的等级）、`model` |
+| `locate` | `question`（String，必填：要找的目标，例如 `蓝色的马克杯。`）；`image` 必填 | `bbox`（`[x1, y1, x2, y2]`）、`point`（`[x, y]`）、`confidence`、`model` |
 | `evaluate` | `questions`（String，必填：Decisions API 的 `questions` 数组，JSON 格式） | `answers`（按问题名索引）、`model` |
 
 例如 `choice` 的测试输入：

@@ -1,0 +1,75 @@
+identity:
+  name: locate
+  author: valen-team
+  label:
+    en_US: Locate
+    zh_Hans: 定位
+description:
+  human:
+    en_US: Get the box around what you describe in an image
+    zh_Hans: 返回图片中所描述目标的边界框
+  llm: Get the box around what you describe in an image
+parameters:
+- name: input
+  type: string
+  required: true
+  label:
+    en_US: Input
+    zh_Hans: 输入
+  human_description:
+    en_US: Text that goes with the image
+    zh_Hans: 与图片一起发送的文本
+  llm_description: Text that goes with the image
+  form: llm
+- name: image
+  type: file
+  required: true
+  label:
+    en_US: Image
+    zh_Hans: 图片
+  human_description:
+    en_US: PNG, JPEG or WebP image to look in
+    zh_Hans: 要查找的 PNG、JPEG 或 WebP 图片
+  llm_description: PNG, JPEG or WebP image to look in
+  form: llm
+- name: model
+  type: string
+  required: true
+  label:
+    en_US: Model
+    zh_Hans: 模型
+  human_description:
+    en_US: Model ID on your configured server
+    zh_Hans: 配置服务上的模型 ID
+  llm_description: Model ID on your configured server
+  form: llm
+  default: valen-2b
+- name: question
+  type: string
+  required: true
+  label:
+    en_US: Target
+    zh_Hans: 目标
+  human_description:
+    en_US: What to locate, for example "The blue mug."
+    zh_Hans: 要定位的目标，例如“蓝色的马克杯。”
+  llm_description: What to locate, for example "The blue mug."
+  form: llm
+output_schema:
+  type: object
+  properties:
+    model:
+      type: string
+    bbox:
+      type: array
+      items:
+        type: number
+    point:
+      type: array
+      items:
+        type: number
+    confidence:
+      type: number
+extra:
+  python:
+    source: tools/locate.py

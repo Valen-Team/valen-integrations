@@ -91,6 +91,8 @@ def _answer(answer):
     """One API answer as the SPEC §3 fields."""
     if answer["type"] == "predicate":
         return {"probability": answer["probability"]}
+    if answer["type"] == "bbox":
+        return {"bbox": answer["bbox"], "point": answer["point"], "confidence": answer["confidence"]}
     if answer["type"] == "choice":
         return {"choice": answer["choice"], "confidence": answer.get("confidence"),
                 "probabilities": {p["value"]: p["probability"] for p in answer["probabilities"]}}

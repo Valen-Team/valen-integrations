@@ -12,7 +12,7 @@ Route support tickets, inspect an image, or prioritize an alert with the public 
 
 No API key is needed. The tool returns `probability`, `branch` (`yes`, `no`, `unsure`) and `model`. Connect a workflow condition to `branch` to route results. Use a separate error path for failed requests.
 
-**Choice** picks one of your named options; **Score** evaluates ordered levels; **Evaluate** asks several questions together. An optional `image` accepts a downloadable PNG, JPEG or WebP URL. Inputs and images are sent to the Valen service; see [data handling](PRIVACY.md).
+**Choice** picks one of your named options; **Score** evaluates ordered levels; **Locate** returns the box around what you describe in an image; **Evaluate** asks several questions together. An optional `image` accepts a downloadable PNG, JPEG or WebP URL. Inputs and images are sent to the Valen service; see [data handling](PRIVACY.md).
 
 [Build the support-review workflow](examples/support-review/recipe.json) with the included code nodes and sample inputs. This is a manual setup recipe; it is not an importable Coze DSL. The example returns queue data and does not issue refunds or send messages.
 
@@ -48,6 +48,7 @@ Every tool also takes `input` (String, required: the text to judge), `image` (St
 | `yes_no` | `question` (String, required), `yes_at` (Number, default 0.7), `no_at` (Number, default 0.3) | `probability`, `branch` (`yes` / `no` / `unsure`), `model` |
 | `choice` | `question` (String, required), `options` (String, required: one per line, `value` or `value: description`) | `choice`, `confidence`, `probabilities`, `branch` (the choice), `model` |
 | `score` | `question` (String, required), `levels` (String, required: one per line, lowest first, `label` or `label: description`) | `score`, `level`, `confidence`, `probabilities`, `branch` (the level), `model` |
+| `locate` | `question` (String, required: what to find, for example `The blue mug.`); `image` is required | `bbox` (`[x1, y1, x2, y2]`), `point` (`[x, y]`), `confidence`, `model` |
 | `evaluate` | `questions` (String, required: the Decisions API `questions` array as JSON) | `answers` (keyed by question name), `model` |
 
 Test input for `choice`, for example:

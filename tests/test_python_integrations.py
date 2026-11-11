@@ -24,6 +24,15 @@ def test_evaluator_real_sdk_transport(api):
     assert sent['body']['input'][0]['content'][1]['image_url'].startswith('data:image/png;base64,')
 
 
+def test_bbox_answers_keep_box_point_and_confidence(api):
+    asked=[{'name':'mug','type':'bbox','instructions':'The blue mug.'},Q]
+    value=ValenEvaluator(asked,base_url=api['url']).invoke({'input':'counter','image':b'\x89PNG\r\n\x1a\nfixture'})
+    assert value['answers']=={'mug':{'bbox':[.25,.25,.75,.75],'point':[.5,.5],'confidence':.9},'urgent':{'probability':.5}}
+    assert api['requests'][0]['body']['questions']==asked
+    api['response']={'model':'v','answers':[{'name':'mug','type':'bbox','bbox':[.25,.25,1.5],'point':[.5,.5],'confidence':.9}]}
+    with pytest.raises(ValueError,match='invalid box'): ValenEvaluator(asked[:1],base_url=api['url']).invoke('counter')
+
+
 def test_lcel_and_async(api):
     router=ValenRouter(Q,base_url=api['url'])
     chain=RunnablePassthrough.assign(branch=router)
@@ -72,7 +81,7 @@ def test_server_owns_hosted_question_limit(api):
 def test_dify_sdk_registration():
     # The Dify runtime monkey-patches networking; keep it out of the LangChain host.
     import subprocess
-    code = "from dify_plugin import DifyPluginEnv; from dify_plugin.core.plugin_registration import PluginRegistration; r=PluginRegistration(DifyPluginEnv()); assert set(r.tools_mapping['valen'][2]) == {'yes_no','choice','score','evaluate'}"
+    code = "from dify_plugin import DifyPluginEnv; from dify_plugin.core.plugin_registration import PluginRegistration; r=PluginRegistration(DifyPluginEnv()); assert set(r.tools_mapping['valen'][2]) == {'yes_no','choice','score','locate','evaluate'}"
     subprocess.run([sys.executable, '-c', code], cwd=ROOT/'dify', check=True, capture_output=True)
 
 
@@ -86,6 +95,10 @@ def test_dify_actual_sdk_and_declared_variables(api):
     assert result=={'probability':.5,'branch':'unsure','model':'valen-fixture'}
     result=invoke(credentials,'evaluate',{'input':'hello','questions':[Q]})
     assert result['answers']['urgent']['probability']==.5
+    result=invoke(credentials,'locate',{'input':'counter','question':'The blue mug.',
+        'image':SimpleNamespace(mime_type='image/png',blob=b'\x89PNG\r\n\x1a\nfixture')})
+    assert result=={'bbox':[.25,.25,.75,.75],'point':[.5,.5],'confidence':.9,'model':'valen-fixture'}
+    assert api['requests'][-1]['body']['questions']==[{'name':'q','type':'bbox','instructions':'The blue mug.'}]
     before=len(api['requests'])
     with pytest.raises(ValueError,match='PNG, JPEG or WebP'):
         invoke(credentials,'yes_no',{'input':'hello','question':'Urgent?',

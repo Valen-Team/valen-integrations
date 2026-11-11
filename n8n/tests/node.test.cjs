@@ -31,6 +31,15 @@ test('Evaluate batches questions, serializes JSON, preserves binary',async()=>{
  assert.match(h.calls[0].body.input[0].content[1].image_url,/^data:image\/png;base64,/);
  assert.ok(out[0][0].binary.data);
 });
+test('Evaluate returns the box, point and confidence of a bbox question',async()=>{
+ const asked=[{name:'mug',type:'bbox',instructions:'The blue mug.'}];
+ const reply=()=>({model:'v',answers:[{name:'mug',type:'bbox',bbox:[.25,.25,.75,.75],point:[.5,.5],confidence:.9}]});
+ const h=harness({operation:'evaluate',inputFormat:'text',input:'counter',questions:asked,model:'valen-2b',imageField:'data'},[reply()]);
+ assert.deepEqual((await h.run())[0][0].json.valen.answers.mug,{bbox:[.25,.25,.75,.75],point:[.5,.5],confidence:.9});
+ assert.deepEqual(h.calls[0].body.questions,asked);
+ const bad=reply(); bad.answers[0].bbox=[.25,.25,1.5];
+ await assert.rejects(harness({operation:'evaluate',inputFormat:'text',input:'counter',questions:asked,model:'valen-2b'},[bad]).run(),/invalid box/);
+});
 test('Choice routing follows configured order',async()=>{
  const h=harness({...base,questionType:'choice',options:'billing: Payments\ntech: Software'},[{model:'v',answers:[{name:'route',type:'choice',choice:'tech',confidence:.8,probabilities:[{value:'billing',probability:.1},{value:'tech',probability:.9}]}]}]);
  const out=await h.run(); assert.equal(out[0].length,0); assert.equal(out[1][0].json.valen.branch,'tech');

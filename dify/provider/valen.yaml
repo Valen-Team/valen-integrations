@@ -32,6 +32,7 @@ tools:
 - tools/yes_no.yaml
 - tools/choice.yaml
 - tools/score.yaml
+- tools/locate.yaml
 - tools/evaluate.yaml
 extra:
   python:

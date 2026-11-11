@@ -34,6 +34,7 @@ The examples return routing data so you can inspect the result before connecting
 | **Yes/No** | “The customer requests a refund.” | Route clear answers and review the middle band |
 | **Choice** | Billing, technical support, or another request? | Pick a named destination from your candidates |
 | **Score** | Low, medium or high urgency? | Prioritize work using ordered levels and their probabilities |
+| **Locate** | “The blue mug.” | Get the box around what you describe in an image |
 | **Evaluate** | Check intent, team and urgency together | Get several named answers from one input |
 
 Use text or one PNG, JPEG or WebP image. Choice and Score return the full distribution, so you can add your own review rules. Probabilities are model estimates; set thresholds for your own data and the cost of a wrong decision. API failures are errors, never negative judgments.

@@ -38,7 +38,7 @@ npm install @valen-team/n8n-nodes-valen@0.1.0 --omit=dev --legacy-peer-deps
 
 ## 配置
 
-- **Evaluate**：输入 1–8 个 Decisions API 问题的 JSON 数组，每个问题有 `name`、`type`、`instructions`。Choice 加 `choices`，Score 加 `levels`。结果在 `valen.answers.<问题名>`。
+- **Evaluate**：输入 1–8 个 Decisions API 问题的 JSON 数组，每个问题有 `name`、`type`、`instructions`。Choice 加 `choices`，Score 加 `levels`。`bbox` 问题描述要在图片中找到的目标，需要填写 Image Binary Field，返回 `bbox`（`[x1, y1, x2, y2]`）、`point` 和 `confidence`，坐标是相对图片宽高的比例。结果在 `valen.answers.<问题名>`。
 - **Route / Yes/No**：默认概率 ≥ 0.7 进入 `yes`，≤ 0.3 进入 `no`，其余进入 `unsure`；阈值可调。
 - **Route / Choice**：每行一个选项，格式为 `value` 或 `value: description`，自动生成同名输出口。
 - **Route / Score**：同样逐行填写等级，从低到高。按概率最高的等级分流，平局选靠前等级，不对期望分数四舍五入。

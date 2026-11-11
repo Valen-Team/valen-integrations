@@ -32,9 +32,10 @@ The tool returns `probability`, `branch` and `model`. With default thresholds, `
 - **Yes/No:** judge one statement and return its probability and routing branch.
 - **Choice:** select from your named options and return the full probability distribution. Enter one `value: description` per line, including an outside-scope option when needed.
 - **Score:** describe ordered levels from lowest to highest and read the expected index, most likely level and distribution.
+- **Locate:** describe what to find in an image and read its `bbox` (`[x1, y1, x2, y2]`), a `point` inside it and `confidence`. Coordinates are fractions of the image's width and height.
 - **Evaluate:** ask multiple named questions about the same input in one request.
 
-Each tool accepts text and an optional PNG, JPEG or WebP image. Choose a model ID; the default is `valen-2b`. Probabilities are estimates, so choose review rules for your own application. Request failures raise errors and never become negative answers.
+Each tool accepts text and an optional PNG, JPEG or WebP image; Locate requires the image. Choose a model ID; the default is `valen-2b`. Probabilities are estimates, so choose review rules for your own application. Request failures raise errors and never become negative answers.
 
 ## Privacy and support
 

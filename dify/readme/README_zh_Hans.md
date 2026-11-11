@@ -28,6 +28,8 @@ https://github.com/Valen-Team/valen-integrations
   `confidence`、`probabilities`、`branch`、`model`。
 - **Score**：等级从低到高，每行一个，格式同上；返回期望等级索引 `score`、最可能的
   `level`、`confidence`、`probabilities`、`branch`、`model`。
+- **Locate**：描述要在图片中找到的目标，必须提供图片；返回 `bbox`（`[x1, y1, x2, y2]`）、框内一点
+  `point`、`confidence`、`model`。坐标是相对图片宽高的比例。
 - **Evaluate**：输入 Decisions API 的 questions JSON 数组，在 JSON 输出中返回 `answers`
   和 `model`。动态问题名可由代码节点读取；单问题工具的声明变量可直接供条件节点选择。
 

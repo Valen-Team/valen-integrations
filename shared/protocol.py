@@ -39,9 +39,9 @@ def validate_questions(value):
         names.add(q['name'])
         if not isinstance(q.get('instructions'), str) or not q['instructions'].strip():
             raise ValueError('Each question needs instructions')
-        if q.get('type') not in ('predicate', 'choice', 'score'):
-            raise ValueError('Question type must be predicate, choice or score')
-        if q['type'] != 'predicate':
+        if q.get('type') not in ('predicate', 'choice', 'score', 'bbox'):
+            raise ValueError('Question type must be predicate, choice, score or bbox')
+        if q['type'] in ('choice', 'score'):
             field, key = ('choices', 'value') if q['type'] == 'choice' else ('levels', 'label')
             values = q.get(field)
             if not isinstance(values, list) or len(values) < 2:
@@ -74,6 +74,12 @@ def probability(value):
     return value
 
 
+def coordinates(value, count):
+    if not isinstance(value, list) or len(value) != count:
+        raise ValueError('API returned an invalid box')
+    return [probability(v) for v in value]
+
+
 def map_answers(response, asked):
     rows = response.get('answers') if isinstance(response, dict) else None
     if not isinstance(rows, list) or len(rows) != len(asked):
@@ -86,6 +92,10 @@ def map_answers(response, asked):
         a = matches[0]
         if q['type'] == 'predicate':
             mapped[q['name']] = {'probability': probability(a.get('probability'))}
+            continue
+        if q['type'] == 'bbox':
+            mapped[q['name']] = {'bbox': coordinates(a.get('bbox'), 4), 'point': coordinates(a.get('point'), 2),
+                                 'confidence': probability(a.get('confidence'))}
             continue
         key = 'value' if q['type'] == 'choice' else 'label'
         labels = [p[key] for p in q['choices' if q['type'] == 'choice' else 'levels']]

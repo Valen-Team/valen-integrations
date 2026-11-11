@@ -25,7 +25,7 @@ def invoke(credentials, operation, params):
     if operation == 'evaluate':
         asked = validate_questions(params['questions'])
     else:
-        kind = {'yes_no': 'predicate', 'choice': 'choice', 'score': 'score'}[operation]
+        kind = {'yes_no': 'predicate', 'choice': 'choice', 'score': 'score', 'locate': 'bbox'}[operation]
         thresholds(yes_at, no_at)
         asked = [single_question(kind, params['question'], params.get('options', params.get('levels', '')))]
     image = params.get('image')
@@ -43,4 +43,6 @@ def invoke(credentials, operation, params):
             raise RuntimeError(api_error_message(error)) from error
     if operation == 'evaluate':
         return mapped
+    if operation == 'locate':
+        return dict(mapped['answers']['q'], model=mapped['model'])
     return dict(route_answer(mapped['answers']['q'], kind, yes_at, no_at), model=mapped['model'])

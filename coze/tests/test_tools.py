@@ -76,6 +76,14 @@ def test_score_level_is_most_likely_and_lower_on_tie(monkeypatch):
     assert (result["level"], result["branch"], result["probabilities"]) == ("low", "low", {"low": 0.5, "high": 0.5})
 
 
+def test_locate_returns_box_point_and_confidence(monkeypatch):
+    answer = {"type": "bbox", "name": "q", "bbox": [0.25, 0.25, 0.75, 0.75], "point": [0.5, 0.5], "confidence": 0.9}
+    result, sent = run(load("locate"), [answer], monkeypatch, image_bytes=PNG, question="The blue mug.",
+                       image="https://example.test/a.png")
+    assert result == {"bbox": [0.25, 0.25, 0.75, 0.75], "point": [0.5, 0.5], "confidence": 0.9, "model": "valen-2b"}
+    assert sent[0]["questions"] == [{"name": "q", "type": "bbox", "instructions": "The blue mug."}]
+
+
 def test_evaluate_keys_answers_by_name(monkeypatch):
     answers = [{"type": "predicate", "name": "refund", "probability": 0.16}]
     result, sent = run(load("evaluate"), answers, monkeypatch,

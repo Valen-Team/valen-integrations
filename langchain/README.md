@@ -31,7 +31,7 @@ The default free API needs no key. For a keyed server, pass `base_url` and `api_
 
 Input can be text, a JSON object/array, or an envelope `{"input": ..., "image": image_bytes}`. Use the envelope for structured evidence containing a field named `input`. Images must be PNG, JPEG or WebP bytes, one per request. Download URLs yourself before invoking; this prevents hidden network fetches in the runnable.
 
-Evaluate returns `{"answers": {question_name: answer}, "model": resolved_model_id}`. Choice answers include `choice`, `confidence`, and candidate probabilities; Score includes expected `score`, most likely `level`, confidence and probabilities. Probabilities are retained without rounding.
+Evaluate returns `{"answers": {question_name: answer}, "model": resolved_model_id}`. Choice answers include `choice`, `confidence`, and candidate probabilities; Score includes expected `score`, most likely `level`, confidence and probabilities. A `bbox` question, for example `{"name": "mug", "type": "bbox", "instructions": "The blue mug."}`, needs an image and returns `bbox` (`[x1, y1, x2, y2]`), `point` and `confidence`, as fractions of the image's width and height. Probabilities are retained without rounding.
 
 ## Route once in LCEL
 

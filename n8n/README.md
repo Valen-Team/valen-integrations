@@ -41,7 +41,7 @@ The review option describes out-of-scope requests explicitly: Choice always sele
 
 ## Operations
 
-- **Evaluate**: supply a Decisions API JSON array of 1–8 questions. Each needs a unique `name`, `type`, and `instructions`. Choice adds `choices: [{value, description}]`; Score adds `levels: [{label, description}]`. Results appear under `valen.answers.<name>`.
+- **Evaluate**: supply a Decisions API JSON array of 1–8 questions. Each needs a unique `name`, `type`, and `instructions`. Choice adds `choices: [{value, description}]`; Score adds `levels: [{label, description}]`. A `bbox` question describes what to find in the image from **Image Binary Field** and returns `bbox` (`[x1, y1, x2, y2]`), `point` and `confidence`, as fractions of the image's width and height. Results appear under `valen.answers.<name>`.
 - **Route / Yes/No**: write one statement/question. Outputs are `yes` (probability ≥ 0.7), `no` (≤ 0.3), and `unsure` (between), with editable thresholds. Require `0 ≤ No at < Yes at ≤ 1`.
 - **Route / Choice**: enter 2–16 distinct options, one per line, `value` or `value: description`. Each creates a named port. Outputs use the selected choice.
 - **Route / Score**: enter ordered levels in the same format. Route uses the most probable level, with the earlier level winning a tie. It does not round the expected score.

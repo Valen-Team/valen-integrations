@@ -22,14 +22,18 @@ export function questions(value: unknown): Question[] {
   if (!q || typeof q.name !== 'string' || !/^[A-Za-z0-9_]+$/.test(q.name) || names.has(q.name)) throw new Error('Question IDs must be unique letters, digits or underscores');
   names.add(q.name);
   if (typeof q.instructions !== 'string' || !q.instructions.trim()) throw new Error('Each question needs instructions');
-  if (!['predicate','choice','score'].includes(q.type)) throw new Error('Question type must be predicate, choice or score');
-  if (q.type !== 'predicate') {
+  if (!['predicate','choice','score','bbox'].includes(q.type)) throw new Error('Question type must be predicate, choice, score or bbox');
+  if (q.type === 'choice' || q.type === 'score') {
    const list = q.type === 'choice' ? q.choices : q.levels;
    const key = q.type === 'choice' ? 'value' : 'label';
    if (!Array.isArray(list) || list.length < 2 || list.some(r => !r || typeof r[key] !== 'string' || !r[key].trim() || typeof r.description !== 'string' || !r.description.trim()) || new Set(list.map(r => r[key])).size !== list.length) throw new Error('Use at least two distinct, described choices or levels');
   }
  }
  return rows;
+}
+function coordinates(value: unknown, count: number): number[] {
+ if (!Array.isArray(value) || value.length !== count) throw new Error('API returned an invalid box');
+ return value.map(probability);
 }
 function probability(value: unknown): number {
  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 1) throw new Error('API returned an invalid probability');
@@ -44,6 +48,7 @@ export function answers(response: any, asked: Question[]): Record<string, any> {
   const a = matches[0];
   if (a.type !== q.type) throw new Error(`API returned the wrong answer type for ${q.name}`);
   if (q.type === 'predicate') { result[q.name] = {probability: probability(a.probability)}; continue; }
+  if (q.type === 'bbox') { result[q.name] = {bbox: coordinates(a.bbox,4), point: coordinates(a.point,2), confidence: probability(a.confidence)}; continue; }
   const key = q.type === 'choice' ? 'value' : 'label';
   const expected = (q.type === 'choice' ? q.choices! : q.levels!).map((r: any) => r[key]);
   if (!Array.isArray(a.probabilities) || a.probabilities.length !== expected.length) throw new Error('API returned incomplete candidate probabilities');

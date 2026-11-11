@@ -3,7 +3,7 @@ from pathlib import Path
 import argparse
 
 HERE = Path(__file__).parent
-TOOLS = ("yes_no", "choice", "score", "evaluate")
+TOOLS = ("yes_no", "choice", "score", "locate", "evaluate")
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--check', action='store_true')
 args = parser.parse_args()

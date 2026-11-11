@@ -23,7 +23,7 @@ print(client.invoke("我被重复扣款了，请退还多收的钱。"))
 
 默认调用免费 API，无需密钥。带密钥的服务可传 `base_url`、`api_key`，也可设置 `VALEN_API_KEY` 环境变量。不要把密钥写入示例或提交到仓库。
 
-输入支持文本、JSON，以及 `{"input": 内容, "image": 图片字节}`；一次最多一张 PNG、JPEG 或 WebP，最多 8 个问题。
+输入支持文本、JSON，以及 `{"input": 内容, "image": 图片字节}`；一次最多一张 PNG、JPEG 或 WebP，最多 8 个问题。`bbox` 问题（如 `{"name": "mug", "type": "bbox", "instructions": "蓝色的马克杯。"}`）需要图片，返回 `bbox`（`[x1, y1, x2, y2]`）、`point` 和 `confidence`，坐标是相对图片宽高的比例。
 
 ## 分流与实际工作流
 
