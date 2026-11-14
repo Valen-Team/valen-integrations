@@ -12,7 +12,7 @@
 https://github.com/Valen-Team/valen-integrations
 ```
 
-选择版本 **dify-v0.1.1** 和文件 **valen-0.1.1.difypkg**，完成安装。也可以在[发布页](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.1)下载插件与示例，再选择「本地插件文件」安装。
+选择版本 **dify-v0.2.0** 和文件 **valen-0.2.0.difypkg**，完成安装。也可以在[发布页](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.2.0)下载插件与示例，再选择「本地插件文件」安装。
 
 这是通过 GitHub 分发的社区插件，Dify 市场审核另行进行。安装包未签名，需要实例允许安装未签名社区插件；强制要求市场签名的实例请先联系管理员。[管理员配置与源码构建](https://github.com/Valen-Team/valen-integrations/blob/main/dify/RELEASING.md)。
 
@@ -33,7 +33,7 @@ https://github.com/Valen-Team/valen-integrations
 - **Evaluate**：输入 Decisions API 的 questions JSON 数组，在 JSON 输出中返回 `answers`
   和 `model`。动态问题名可由代码节点读取；单问题工具的声明变量可直接供条件节点选择。
 
-先安装并授权插件，再在工作室导入 [示例工作流](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.1.1/support-review.yml)。
+先安装并授权插件，再在工作室导入 [示例工作流](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.2.0/support-review.yml)。
 示例将工单送入 Yes/No，根据结果输出到退款、普通支持、人工复核三个路径；请求失败走单独
 的错误路径，保留原工单。各终点输出分别使用 refund_、support_、review_、failure_ 前缀，
 满足 Dify 对所有输出节点变量名称唯一的要求。示例仅输出队列结果，不执行外部业务操作。可选图片输入接收一个

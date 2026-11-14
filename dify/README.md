@@ -14,7 +14,7 @@ Requires Dify 1.18.0 or newer. Install the Valen tool plugin, then authorize its
 
 You can also configure `https://llm-proxy.openxxlab.com` with your API key or a trusted self-hosted Valen endpoint. The plugin connects to `/v1/models` and `/v1/decisions`. Keep the key in Dify provider credentials.
 
-The [GitHub release](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.1.1) provides the community package for instances that allow unsigned plugins. In Dify, use **Integrations → Install → Local Package File** (called **Plugins → Install plugin** in older layouts).
+The [GitHub release](https://github.com/Valen-Team/valen-integrations/releases/tag/dify-v0.2.0) provides the community package for instances that allow unsigned plugins. In Dify, use **Integrations → Install → Local Package File** (called **Plugins → Install plugin** in older layouts).
 
 ## Try a support ticket
 
@@ -25,7 +25,7 @@ Add **Yes/No** and enter:
 
 The tool returns `probability`, `branch` and `model`. With default thresholds, `branch` is `yes` at 0.7 or above, `no` at 0.3 or below, and `unsure` between them. Connect an IF/ELSE node to these values to choose a refund-review queue, general support or human review. The example returns routing data; your workflow controls business actions.
 
-[Download the starter workflow](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.1.1/support-review.yml), install and authorize Valen, then import it in Studio. It includes all three routes and a separate request-failure output.
+[Download the starter workflow](https://github.com/Valen-Team/valen-integrations/releases/download/dify-v0.2.0/support-review.yml), install and authorize Valen, then import it in Studio. It includes all three routes and a separate request-failure output.
 
 ## Tools
 
