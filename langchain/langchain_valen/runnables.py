@@ -40,7 +40,7 @@ class ValenEvaluator(Runnable[Any, dict]):
             else:
                 with Valen.remote(self.base_url, api_key=self.api_key, model=self.model,
                                   timeout=self.timeout, max_retries=self.max_retries,
-                                  headers={'User-Agent': 'valen-langchain/0.1.0'}) as client:
+                                  headers={'User-Agent': 'valen-langchain/0.2.0'}) as client:
                     result = client.predict(payload)
         except ValenAPIError as error:
             raise RuntimeError(api_error_message(error)) from error

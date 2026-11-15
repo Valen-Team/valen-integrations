@@ -19,7 +19,7 @@ people can see and change them.
 Saving a connection checks it with `GET {host}/v1/models`.
 
 Every request sends `User-Agent: valen-<platform>/<integration version>`, for example
-`valen-n8n/0.1.0`, including the connection check, and waits up to 120 seconds for each attempt.
+`valen-n8n/0.2.0`, including the connection check, and waits up to 120 seconds for each attempt.
 
 ## 2. Request
 

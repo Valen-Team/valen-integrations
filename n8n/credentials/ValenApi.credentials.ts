@@ -10,7 +10,7 @@ export class ValenApi implements ICredentialType {
  ];
  authenticate: IAuthenticateGeneric = { type: 'generic', properties: { headers: {
   Authorization: '={{$credentials.apiKey ? "Bearer " + $credentials.apiKey : ""}}',
-  'User-Agent': 'valen-n8n/0.1.0',
+  'User-Agent': 'valen-n8n/0.2.0',
  } } };
  test: ICredentialTestRequest = { request: {
   baseURL: '={{$credentials.baseUrl.replace(/\\/+$/, "").replace(/\\/v1$/, "") + "/v1"}}',

@@ -3,4 +3,4 @@ from .runnables import ValenEvaluator, ValenRouter
 from .tools import ValenDecisionTool
 
 __all__ = ['ValenEvaluator', 'ValenRouter', 'ValenDecisionTool']
-__version__ = '0.1.0'
+__version__ = '0.2.0'

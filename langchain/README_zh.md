@@ -7,7 +7,7 @@
 ## 安装与首次运行
 
 ```sh
-python -m pip install langchain-valen==0.1.0
+python -m pip install langchain-valen==0.2.0
 ```
 
 需要 Python 3.10+，安装时会自动获取 LangChain Core 和 Valen SDK。[PyPI 包](https://pypi.org/project/langchain-valen/)

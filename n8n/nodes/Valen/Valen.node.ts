@@ -4,7 +4,7 @@ import { answers, baseUrl, imageMime, options, questions, route, Question } from
 
 async function request(ctx: IExecuteFunctions | ILoadOptionsFunctions, method: 'GET' | 'POST', path: string, body?: object): Promise<any> {
  const credentials = await ctx.getCredentials('valenApi');
- const headers: Record<string,string> = {'User-Agent':'valen-n8n/0.1.0'};
+ const headers: Record<string,string> = {'User-Agent':'valen-n8n/0.2.0'};
  if (credentials.apiKey) headers.Authorization = `Bearer ${credentials.apiKey}`;
  for (let attempt = 0; ; attempt++) {
   try {

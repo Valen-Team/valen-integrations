@@ -22,7 +22,7 @@
 mkdir -p ~/.n8n/nodes
 cd ~/.n8n/nodes
 # 如果没有 package.json，先运行 npm init -y。
-npm install @valen-team/n8n-nodes-valen@0.1.0 --omit=dev --legacy-peer-deps
+npm install @valen-team/n8n-nodes-valen@0.2.0 --omit=dev --legacy-peer-deps
 ```
 
 手动安装后重启 n8n。Docker 用户在持久化目录 `/home/node/.n8n/nodes` 中以 `node` 用户安装。[npm 包](https://www.npmjs.com/package/@valen-team/n8n-nodes-valen)

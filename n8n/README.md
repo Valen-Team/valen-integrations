@@ -22,7 +22,7 @@ For a manual installation, run as the user that runs n8n:
 mkdir -p ~/.n8n/nodes
 cd ~/.n8n/nodes
 # Run npm init -y first if this directory has no package.json.
-npm install @valen-team/n8n-nodes-valen@0.1.0 --omit=dev --legacy-peer-deps
+npm install @valen-team/n8n-nodes-valen@0.2.0 --omit=dev --legacy-peer-deps
 ```
 
 Restart n8n after manual installation. In Docker, use the persistent `/home/node/.n8n/nodes` directory as the `node` user. [npm package](https://www.npmjs.com/package/@valen-team/n8n-nodes-valen) · [n8n installation guide](https://docs.n8n.io/integrations/community-nodes/installation/manual-install/)

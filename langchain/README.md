@@ -7,7 +7,7 @@ Add ticket routing, image checks and structured judgments to your LangChain app.
 ## Install
 
 ```sh
-python -m pip install langchain-valen==0.1.0
+python -m pip install langchain-valen==0.2.0
 ```
 
 [View on PyPI](https://pypi.org/project/langchain-valen/)
